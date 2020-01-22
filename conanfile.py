@@ -3,7 +3,7 @@ import os
 
 
 class LibnameConan(ConanFile):
-    name = "libname"
+    name = "libvtk"
     description = "Keep it short"
     topics = ("conan", "libname", "logging")
     url = "https://github.com/bincrafters/conan-libname"
@@ -12,13 +12,13 @@ class LibnameConan(ConanFile):
     # Remove following lines if the target lib does not use CMake
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
-
+    version = "None"
     # Options may need to change depending on the packaged library
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
-
-    _source_subfolder = "source_subfolder"
+    _extractionfolder = "source_subfolder"
+    _source_subfolder = "source_subfolder/VTK-7.1.1"
     _build_subfolder = "build_subfolder"
 
     requires = (
@@ -30,14 +30,18 @@ class LibnameConan(ConanFile):
             del self.options.fPIC
 
     def source(self):
-        tools.get(**self.conan_data["sources"][self.version])
-        extracted_dir = self.name + "-" + self.version
-        os.rename(extracted_dir, self._source_subfolder)
+        tools.download("https://www.vtk.org/files/release/7.1/VTK-7.1.1.zip", "vtk.zip")
+        tools.unzip("vtk.zip", self._extractionfolder)
+        tools.replace_in_file(self._source_subfolder + "/CMakeLists.txt", "project(VTK)",
+                              '''project(VTK)
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()''')
+
 
     def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_TESTS"] = False  # example
-        cmake.configure(build_folder=self._build_subfolder)
+        cmake.configure(source_folder=self._source_subfolder, build_folder=self._build_subfolder)
         return cmake
 
     def build(self):
