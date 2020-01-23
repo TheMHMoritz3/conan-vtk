@@ -94,6 +94,7 @@ jobs:
           python-version: '3.8'
       - name: Install Conan
         run: |
+          sudo apt update
           sudo apt install xorg-dev libglu1-mesa-dev
           pip install bincrafters_package_tools
           conan user
