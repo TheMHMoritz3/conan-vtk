@@ -22,7 +22,8 @@ class LibnameConan(ConanFile):
     _build_subfolder = "build_subfolder"
 
     requires = (
-        "zlib/1.2.11"
+        "zlib/1.2.11",
+        "freeglut/3.0.0@bincrafters/stable"
     )
 
     def config_options(self):
