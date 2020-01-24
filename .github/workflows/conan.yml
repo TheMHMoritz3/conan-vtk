@@ -92,10 +92,12 @@ jobs:
       - uses: actions/setup-python@v1
         with:
           python-version: '3.8'
-      - name: Install Conan
+      - name: Install Dependendcies
         run: |
           sudo apt update
           sudo apt install mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev libx11-dev libopengl0
+      - name: Install Conan
+        run: |
           pip install bincrafters_package_tools
           conan user
       - name: Run
