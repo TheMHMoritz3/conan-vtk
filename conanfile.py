@@ -1,4 +1,5 @@
 from conans import ConanFile, CMake, tools
+from shutil import copyfile
 import os
 
 
@@ -32,10 +33,10 @@ class LibnameConan(ConanFile):
     def source(self):
         tools.download("https://www.vtk.org/files/release/7.1/VTK-7.1.1.zip", "vtk.zip")
         tools.unzip("vtk.zip", self._extractionfolder)
-#         tools.replace_in_file(self._source_subfolder + "/CMakeLists.txt", "project(VTK)",
-#                               '''project(VTK)
-# include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-# conan_basic_setup()''')
+        tools.replace_in_file(self._source_subfolder + "/CMakeLists.txt", "project(VTK)",
+                               '''project(VTK)
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()''')
 
     def _configure_cmake(self):
         cmake = CMake(self)
@@ -50,6 +51,9 @@ class LibnameConan(ConanFile):
         return cmake
 
     def build(self):
+        if not os.path.exists(self._build_subfolder):
+            os.makedirs(self._build_subfolder)
+        copyfile("./conanbuildinfo.cmake", self._build_subfolder + "/conanbuildinfo.cmake")
         cmake = self._configure_cmake()
         cmake.build()
 
