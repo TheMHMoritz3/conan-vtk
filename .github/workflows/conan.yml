@@ -95,7 +95,7 @@ jobs:
       - name: Install Conan
         run: |
           sudo apt update
-          sudo apt install libopengl0
+          sudo apt install mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev
           pip install bincrafters_package_tools
           conan user
       - name: Run
