@@ -23,7 +23,7 @@ class LibnameConan(ConanFile):
     _build_subfolder = "build_subfolder"
 
     requires = (
-        "zlib/1.2.11"
+        "zlib/1.2.11",
     )
 
     def config_options(self):
