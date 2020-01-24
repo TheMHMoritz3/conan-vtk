@@ -13,7 +13,7 @@ class LibnameConan(ConanFile):
     # Remove following lines if the target lib does not use CMake
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
-    version = "None"
+    version = "7.1.1"
     # Options may need to change depending on the packaged library
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "Examples": [True, False], "Rendering": [True, False]}
