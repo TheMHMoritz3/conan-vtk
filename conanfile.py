@@ -15,15 +15,14 @@ class LibnameConan(ConanFile):
     version = "None"
     # Options may need to change depending on the packaged library
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": False, "fPIC": True}
+    options = {"shared": [True, False], "fPIC": [True, False], "Examples": [True, False], "Rendering": [True, False]}
+    default_options = {"shared": True, "fPIC": True, "Examples": False, "Rendering": True}
     _extractionfolder = "source_subfolder"
     _source_subfolder = "source_subfolder/VTK-7.1.1"
     _build_subfolder = "build_subfolder"
 
     requires = (
-        "zlib/1.2.11",
-        "freeglut/3.0.0@bincrafters/stable"
+        "zlib/1.2.11"
     )
 
     def config_options(self):
@@ -38,10 +37,15 @@ class LibnameConan(ConanFile):
 # include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 # conan_basic_setup()''')
 
-
     def _configure_cmake(self):
         cmake = CMake(self)
-        cmake.definitions["BUILD_TESTS"] = False  # example
+
+        cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = True
+
+        cmake.definitions["BUILD_EXAMPLES"] = self.options.Examples
+        cmake.definitions["BUILD_TESTINGS"] = False
+        cmake.definitions["BUILD_SHARED"] = True
+
         cmake.configure(source_folder=self._source_subfolder, build_folder=self._build_subfolder)
         return cmake
 
